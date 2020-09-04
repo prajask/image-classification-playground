@@ -1,0 +1,81 @@
+{% extends "main/base.html" %}
+{% set title = "Model Insights" %}
+{% set active = "classify_images" %}
+
+{% block body %}
+
+    <div class="card-grid" id="model-insights">
+        {% if "predictions" in session %}
+            <div class="card model-accuracy">
+                <p class="title">Current Prediction Accuracy</p>
+
+                <p>
+                    <span>Images Provided: </span>
+                    {{session["number_of_images"]}} Images
+                </p>
+
+                <p>
+                    <span>Correct Predictions: </span>
+                    {{session["number_of_images"] - session["number_of_corrections"]}}
+                </p>
+
+                <p>
+                    <span>Accuracy: </span>
+                </p>
+
+                <div class="accuracy-bar">
+                    <div class="border">
+                        <p>
+                            {{session["prediction_accuracy"]}} %
+                        </p>
+                    </div>
+
+                    <div class="bar"></div>
+
+                    <script>
+                        const accuracy_bar_border = document.querySelector(".border");
+                        const accuracy_bar = document.querySelector(".bar");
+
+                        if("{{session['prediction_accuracy']}}" < 50){
+                            accuracy_bar_border.style.border = "2px solid #FF333A";
+                            accuracy_bar.style.background = "#FF333A";
+                        }
+
+                        else{
+                            accuracy_bar_border.style.border = "2px solid #8AC926";
+                            accuracy_bar.style.background = "#8AC926";
+                        }   
+
+                        accuracy_bar.style.width = "{{session['prediction_accuracy']}}%";
+                    </script>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="card model-accuracy">
+            <p class="title">Model Training and Validation Accuracy</p>
+
+            <img src="{{url_for( 'static', filename = session['model_path'] + '/model_accuracy.png' )}}" alt="Model Training and Validation Accuracy Graph">
+        </div>
+
+        <div class="card model-accuracy">
+            <p class="title">Model Training and Validation Loss</p>
+
+            <img src="{{url_for( 'static', filename = session['model_path'] + '/model_loss.png' )}}" alt="Model Training and Validation Loss Graph">
+        </div>
+    </div>
+
+    {% if "logged_in" in session and session["logged_in"] and "predictions" in session %}
+
+        <div class="button-grid">
+            <a href="{{ url_for( 'main.tune_model' ) }}" class="button">Tune Model</a>
+            <a href="{{url_for( 'main.finish_classification' )}}" class="button">Finish</a>
+        </div>
+    
+    {% elif "predictions" in session %}
+
+        <a href="{{url_for( 'main.finish_classification' )}}" class="button" id="next-step">Finish</a>
+
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+{% set active = "user_models" %}
+{% set title = "My Models" %}
+
+{% block body %}
+
+    <div class="card-grid" id="models">
+
+        <div class="card">
+            <p class="name">Default Model</p>
+            
+            <div class="links">
+    
+                <a href="{{url_for( 'main.model_insights_from_id', model_id = 'default' )}}" class="model-insights" target="_blank">
+                    View Model Insights
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+                
+            </div>
+        </div>
+    
+        {% for model in models %}
+            <div class="card">
+                <p class="name">{{models[model]}}</p>
+    
+                <div class="links">
+    
+                    <a href="{{url_for( 'main.model_insights_from_id', model_id = model )}}" class="model-insights" target="_blank">
+                        View Model Insights
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+    
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

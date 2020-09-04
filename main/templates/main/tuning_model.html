@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+{% set active = "classify_images" %}
+{% set title = "Tuning Model" %}
+
+{% block body %}
+
+    <div class="loading">
+            
+        <img src="{{url_for( 'static', filename = 'images/gear.svg' )}}" alt="Loading">
+        <p>Tuning Your Model. This Might Take a While... Please Wait...</p>
+
+    </div>
+
+    <script src="{{url_for( 'static', filename = 'js/main/tune_model/train_model.js' )}}"></script>
+
+{% endblock %}

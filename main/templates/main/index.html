@@ -1,0 +1,34 @@
+{% extends "main/base.html" %}
+{% set title = "Home" %}
+
+{% block body %}
+
+    <section class="showcase">
+        <div>
+            <img src="{{url_for( 'static', filename = 'images/showcase/classify_images.png' )}}" alt="">
+            <p class="title">Classify Images</p>
+        </div>
+        
+        <div>
+            <img src="{{url_for( 'static', filename = 'images/showcase/train_model.png' )}}" alt="">
+            <p class="title">Tune Your Own Models</p>
+        </div>
+        
+        <div>
+            <img src="{{url_for( 'static', filename = 'images/showcase/model_insights.png' )}}" alt="">
+            <p class="title">View Model Insights</p>
+        </div>
+    </section>
+
+    {% if "logged_in" in session and session["logged_in"] %}
+        <a href="{{url_for( 'main.upload_images' )}}" class="sign-up button">Get Started</a>
+    {% else%}
+        <a href="{{url_for( 'auth.sign_up' )}}" class="sign-up button">Sign Up</a>
+
+        <a href="{{url_for( 'main.upload_images' )}}" class="guest">
+            Or Get Started as a Guest
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    {% endif %}
+
+{% endblock %}

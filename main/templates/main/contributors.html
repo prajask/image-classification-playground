@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+{% set title = "Contributors" %}
+{% set active = "contributors" %}
+{% block body %}
+
+<h2 style="text-align: center;">Meet the Contributors</h2>
+
+<div class="card-grid" id="contributors">
+    <div class="card">
+        <img src="{{url_for( 'static', filename = 'images/contributors/prajas.jpg' )}}" alt="Prajas Kadepurkar">
+        <p class="name">Prajas Kadepurkar</p>
+        <p class="role">Full Stack Web Development</p>
+        <div class="links">
+            <a href="https://www.linkedin.com/in/prajask/">
+                <i class="fab fa-linkedin"></i>
+            </a>
+
+            <a href="https://github.com/prajask">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="{{url_for( 'static', filename = 'images/contributors/elton.jpg' )}}" alt="Elton Lemos">
+        <p class="name">Elton Lemos</p>
+        <p class="role">AI / ML Development</p>
+        <div class="links">
+            <a href="https://www.linkedin.com/in/elton-lemos/">
+                <i class="fab fa-linkedin"></i>
+            </a>
+
+            <a href="https://github.com/icefrostpeng">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="{{url_for( 'static', filename = 'images/contributors/abhishek.jpeg' )}}" alt="Abhishek Ghoshal">
+        <p class="name">Abhishek Ghoshal</p>
+        <p class="role">AI / ML Development</p>
+        <div class="links">
+            <a href="https://www.linkedin.com/in/abhishek-ghoshal-0a0ab613/">
+                <i class="fab fa-linkedin"></i>
+            </a>
+
+            <a href="https://github.com/abhighosh98">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="{{url_for( 'static', filename = 'images/contributors/tanmey.jpeg' )}}" alt="Tanmey Saraiya">
+        <p class="name">Tanmey Saraiya</p>
+        <p class="role">Front End Web Development</p>
+        <div class="links">
+            <a href="https://www.linkedin.com/in/tanmey-saraiya-bab59016a/">
+                <i class="fab fa-linkedin"></i>
+            </a>
+
+            <a href="https://github.com/TanmeySaraiya">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </div>
+</div>    
+
+{% endblock %}

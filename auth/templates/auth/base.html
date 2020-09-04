@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Prajas Kadepurkar | Elton Lemos | Abhishek Ghoshal | Tanmey Saraiya">
+
+    <link rel="stylesheet" href="{{url_for( 'static', filename = 'css/style.css' )}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+    
+    <title>Image Classification Playground | {{title}}</title>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="{{url_for( 'main.index' )}}" class="logo">
+                <i class="far fa-images"></i>
+                <span>Image Classification Playground</span>
+            </a>
+
+            <ul>
+                <li>
+                    <a href="{{url_for( 'main.contributors' )}}" class="{{ 'active' if active == 'contributors' else '' }}">Contributors</a>
+                </li>
+
+                <li>
+                    <a href="{{url_for( 'main.upload_images' )}}" class="{{ 'active' if active == 'classify_images' else '' }}">Classify Images</a>
+                </li>
+
+                <li>
+                    <a href="{{url_for( 'auth.login' )}}" class="{{ 'active' if active == 'login' else '' }}">Login</a>
+                </li>
+
+                <li>
+                    <a href="{{url_for( 'auth.sign_up' )}}" class="{{ 'active' if active == 'sign_up' else '' }}">Sign Up</a>
+                </li>
+            </ul>
+        </nav>
+
+        <nav class="mobile-nav">
+            <a href="{{url_for( 'main.index' )}}" class="logo">
+                <i class="far fa-images"></i>
+                <span>Image Classification Playground</span>
+            </a>
+
+            <i class="fas fa-bars" id="sidebar-toggle"></i>
+        </nav>
+
+        <div class="sidebar">
+            <ul>
+                <li>
+                    <a href="{{url_for( 'main.contributors' )}}" class="{{ 'active' if active == 'contributors' else '' }}">Contributors</a>
+                </li>
+
+                <li>
+                    <a href="{{url_for( 'main.upload_images' )}}" class="{{ 'active' if active == 'classify_images' else '' }}">Classify Images</a>
+                </li>
+
+                {% if "logged_in" in session and session["logged_in"] %}
+
+                    <li>
+                        <a href="{{url_for( 'main.user_models' )}}">My Models</a>
+                    </li>
+
+                    <li>
+                        <a href="{{url_for( 'auth.logout' )}}">Logout</a>
+                    </li>
+
+                {% else %}
+                    <li>
+                        <a href="{{url_for( 'auth.login' )}}" class="{{ 'active' if active == 'login' else '' }}">Login</a>
+                    </li>
+
+                    <li>
+                        <a href="{{url_for( 'auth.sign_up' )}}" class="{{ 'active' if active == 'sign_up' else '' }}">Sign Up</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    
+        {% block body %}
+        {% endblock %}
+    </div>
+
+    <script src="{{url_for( 'static', filename = 'js/mobile_nav.js' )}}"></script>
+</body>
+</html>

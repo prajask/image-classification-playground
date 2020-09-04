@@ -1,0 +1,19 @@
+{% extends "main/base.html" %}
+{% set active = "classify_images" %}
+{% set title = "Classifying Images" %}
+
+{% block body %}
+
+    <div class="loading">
+        
+        <img src="{{url_for( 'static', filename = 'images/gear.svg' )}}" alt="Loading">
+        <p>Classifying Your Images. Please Wait...</p>
+
+    </div>
+
+    <script>
+        classification_url = "/classify_images/{{model}}";
+    </script>
+    <script src="{{url_for( 'static', filename = 'js/main/classify_images.js' )}}"></script>
+
+{% endblock %}

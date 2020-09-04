@@ -1,0 +1,29 @@
+{% extends "auth/base.html" %}
+{% set active = "sign_up" %}
+{% set title = "Sign Up" %}
+
+{% block body %}
+
+    <h2 class="title">Get Started</h3>
+
+    <div class="card register-container">
+        <form action="{{url_for( 'auth.sign_up' )}}" id="email-form" method="POST">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
+
+            {% if error and error == "already_registered" %}
+                <p class="error">Email ID Already Registered</p>
+            {% endif %}
+
+            <p class="error" id="invalid-email" style="display: none;">Invalid Email ID</p>
+
+            <button type="button" class="button" onclick="validate_email()">Next</button>
+        </form>
+    </div>
+
+    <a href="{{url_for( 'auth.login' )}}" class="existing-user">Already Have an Account ? Login Here !</a>
+
+    <script src="{{url_for( 'static', filename = 'js/auth/sign_up/fields_and_validators.js' )}}"></script>
+    <script src="{{url_for( 'static', filename = 'js/auth/sign_up/validation.js' )}}"></script>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "main/base.html" %}
+{% set title = "Upload Images" %}
+{% set active = "classify_images" %}
+
+{% block body %}
+
+    <form action="{{url_for('main.upload_images')}}" method="POST" enctype="multipart/form-data" class="file-form" id="file-input-form">
+        <label for="image-file-input" class="file-input-label">
+            <i class="fas fa-upload"></i>
+            <p id="input-label-text">Drag and Drop Images or Browse</p>
+        </label>
+        <input id="image-file-input" name="image-file-input" class="image-file-input" type="file" accept="image/*" multiple required/>
+
+        <button class="button" type="button" onclick="validate()">Next</button>
+    </form>
+
+    <script src="{{url_for( 'static', filename = 'js/main/upload_images.js' )}}"></script>
+
+{% endblock %}

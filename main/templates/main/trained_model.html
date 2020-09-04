@@ -1,0 +1,31 @@
+{% extends "main/base.html" %}
+{% set active = "classify_images" %}
+{% set title = "Trained Model" %}
+
+{% block body %}
+
+    <div class="card-grid" id="model-insights">
+        <div class="card model-accuracy">
+            <p class="title">Model Name</p>
+            <p class="title">{{session["temp_model_name"]}}</p>
+        </div>
+
+        <div class="card model-accuracy">
+            <p class="title">Model Training and Validation Accuracy</p>
+
+            <img src="{{url_for( 'static', filename = 'models/temp/' + session['id'] + '/' + session['temp_model_id'] + '/model_accuracy.png' )}}" alt="Model Training and Validation Accuracy Graph">
+        </div>
+
+        <div class="card model-accuracy">
+            <p class="title">Model Training and Validation Loss</p>
+
+            <img src="{{url_for( 'static', filename = 'models/temp/' + session['id'] + '/' + session['temp_model_id'] + '/model_loss.png' )}}" alt="Model Training and Validation Loss Graph">
+        </div>
+    </div>
+
+    <div class="button-grid">
+        <a href="/saving_model" class="button">Save Model</a>
+        <a href="/finish_classification" class="button">Finish</a>
+    </div>
+
+{% endblock %}

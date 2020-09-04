@@ -1,0 +1,26 @@
+{% extends "auth/base.html" %}
+{% set title = "Login" %}
+{% set active = "login" %}
+
+{% block body %}
+    
+    <div class="card login-container">
+        <form action="{{url_for( 'auth.login' )}}" method="POST">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email ID" required/>
+            {% if error %}
+                <p class="error">Invalid Email or Password</p>
+            {% endif %}
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            
+            <button class="button">Login</button>
+
+            <a href="{{url_for( 'auth.forgot_password' )}}" class="forgot-password">Forgot Password ?</a>
+        </form>
+    </div>
+
+    <a href="{{url_for( 'auth.sign_up' )}}" class="new-user">New User ? Sign Up Here !</a>
+
+{% endblock %}

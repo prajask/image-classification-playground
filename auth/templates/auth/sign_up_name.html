@@ -1,0 +1,28 @@
+{% extends "auth/base.html" %}
+{% set active = "sign_up" %}
+{% set title = "Sign Up" %}
+
+{% block body %}
+
+    <h2 class="title">Lastly</h2>
+
+    <div class="card register-container">
+        <form action="{{url_for( 'auth.sign_up_name' )}}" method="POST" id="name-form">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+            <p class="error" id="first-name-error" style="display: none;">First Name Must Be At Least 2 Characters Long.</p>
+
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+            <p class="error" id="last-name-error" style="display: none;">First Name Must Be At Least 2 Characters Long.</p>
+
+            <button type="button" class="button" onclick="validate_name_fields()">Sign Up</button>
+        </form>
+    </div>
+
+    <a href="{{url_for( 'auth.login' )}}" class="existing-user">Already Have an Account ? Login Here !</a>
+
+    <script src="{{url_for( 'static', filename = 'js/auth/sign_up/fields_and_validators.js' )}}"></script>
+    <script src="{{url_for( 'static', filename = 'js/auth/sign_up/validation.js' )}}"></script>
+
+{% endblock %}

@@ -1,0 +1,228 @@
+{% extends "main/base.html" %}
+{% set title = "Tune Model" %}
+{% set active = "classify_images" %}
+
+{% block body %}
+    <form action="{{url_for( 'main.tune_model' )}}" method="POST" id="tune-model-form">
+
+        <input type="hidden" name="number_of_layers_before_flatten" id="number_of_layers_before_flatten" value="{{session['model_summary']['layers_before_flatten'] | length}}">
+        <input type="hidden" name="number_of_layers_after_flatten" id="number_of_layers_after_flatten" value="{{session['model_summary']['layers_after_flatten'] | length}}">
+
+        <div class="card-grid" id="model-layers">
+            <div class="card" id="model_name">
+                <p class="title">Model Name</p>
+                
+                <input type="text" name="name" id="name" value="My Model" required>
+            </div>
+
+            <div class="card" id="input_layer">
+                <p class="title">Input Layer</p>
+
+                <label for="input_layer_class">Class</label>
+                <input type="text" id="input_layer_class" name="input_layer_class" value="Convolution" disabled>
+
+                <label for="input_layer_input_size">Input Size</label>
+                <input type="text" id="input_layer_input_size" name="input_layer_input_size" value="{{session['model_summary']['input_layer']['input_size']}}" disabled>
+
+                <label for="input_layer_filters">Filter Size</label>
+                <input type="text" class="filter_size" id="input_layer_filter_size" name="input_layer_filter_size" value="{{session['model_summary']['input_layer']['filter_size']}}" required>
+
+                <label for="input_layer_kernel_size">Kernel Size</label>
+                <input type="text" class="kernel_size" id="input_layer_kernel_size" name="input_layer_kernel_size" value="{{session['model_summary']['input_layer']['kernel_size']}}" required>
+
+                <label for="input_layer_activation">Activation Function</label>
+                <select name="input_layer_activation" id="input_layer_activation">
+                    <option value="{{session['model_summary']['input_layer']['activation']}}" selected>{{session['model_summary']['input_layer']['activation']}}</option>
+
+                    {% for activation_function in activation_functions %}
+                        <option value="{{activation_function}}">{{activation_function}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% for layer in session["model_summary"]["layers_before_flatten"] %}
+                <div class="card" id="{{'layer_' + layer['number']}}">
+                    <p class="title">Layer {{layer["number"]}}</p>
+
+                    {% if layer["class_name"] == "Convolution" %}
+                        <label for="{{'layer_' + layer['number'] + '_class'}}">Class</label>
+                        <select id="{{'layer_' + layer['number'] + '_class'}}" name="{{'layer_' + layer['number'] + '_class'}}" onchange="change_layer_class(this)">
+                            <option value="{{layer['class']}}" selected>{{layer['class_name']}}</option>
+                            
+                            <option value="MaxPool2D">Max Pooling</option>
+                            <option value="Dropout">Dropout</option>
+                        </select>
+
+                        <div id="{{'layer_' + layer['number'] + '_parameters'}}">
+                            <label for="{{'layer_' + layer['number'] + '_filter_size'}}">Filter Size</label>
+                            <input type="text" class="filter_size" id="{{'layer_' + layer['number'] + '_filter_size'}}" name="{{'layer_' + layer['number'] + '_filter_size'}}" value="{{layer['filter_size']}}" required>
+
+                            <label for="{{'layer_' + layer['number'] + '_kernel_size'}}">Kernel Size</label>
+                            <input type="text" class="kernel_size" id="{{'layer_' + layer['number'] + '_kernel_size'}}" name="{{'layer_' + layer['number'] + '_kernel_size'}}" value="{{layer['kernel_size']}}" required>
+
+                            <label for="{{'layer_' + layer['number'] + '_activation'}}">Activation Function</label>
+                            <select id="{{'layer_' + layer['number'] + '_activation'}}" name="{{'layer_' + layer['number'] + '_activation'}}">
+                                <option value="{{layer['activation']}}">{{layer['activation']}}</option>
+
+                                {% for activation_function in activation_functions %}
+                                    <option value="{{activation_function}}">{{activation_function}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    {% elif layer["class_name"] == "Max Pooling" %}
+                        <label for="{{'layer_' + layer['number'] + '_class'}}">Class</label>
+                        <select id="{{'layer_' + layer['number'] + '_class'}}" name="{{'layer_' + layer['number'] + '_class'}}" onchange="change_layer_class(this)">
+                            <option value="{{layer['class']}}" selected>{{layer['class_name']}}</option>
+                            
+                            <option value="Conv2D">Convolution</option>
+                            <option value="Dropout">Dropout</option>
+                        </select>
+
+                        <div id="{{'layer_' + layer['number'] + '_parameters'}}">
+                            <label for="{{'layer_' + layer['number'] + '_pool_size'}}">Pool Size</label>
+                            <input type="text" class="pool_size" id="{{'layer_' + layer['number'] + '_pool_size'}}" name="{{'layer_' + layer['number'] + '_pool_size'}}" value="{{layer['pool_size']}}" required>
+                        </div>
+
+                    {% elif layer["class_name"] == "Dropout" %}
+                        <label for="{{'layer_' + layer['number'] + '_class'}}">Class</label>
+                        <select id="{{'layer_' + layer['number'] + '_class'}}" name="{{'layer_' + layer['number'] + '_class'}}" onchange="change_layer_class(this)">
+                            <option value="{{layer['class']}}" selected>{{layer['class_name']}}</option>
+                            
+                            <option value="Convolution">Convolution</option>
+                            <option value="MaxPool2D">Max Pooling</option>
+                        </select>
+
+                        <div id="{{'layer_' + layer['number'] + '_parameters'}}">
+                            <label for="{{'layer_' + layer['number'] + '_rate'}}">Drop Rate</label>
+                            <input type="text" class="drop_rate" id="{{'layer_' + layer['number'] + '_rate'}}" name="{{'layer_' + layer['number'] + '_rate'}}" value="{{layer['rate']}}" required>
+                        </div>
+                    {% endif %}
+
+                    <button type="button" class="button remove-layer" onclick="remove_layer_before_flatten(this)">Remove Layer</button>
+                </div>
+            {% endfor %}
+
+            <button type="button" class="button" id="add_layer_before_flatten">Add Layer</button>
+
+            <div class="card" id="flatten_layer">
+                <p class="title">Flatten Layer</p>
+
+                <p class="content">
+                    The 2 Dimensional Output of Convolution and Max Pooling Layer Needs to be Converted into 1 Dimension in Order to be Processed by Dense Layer. For the Convinience of the User, a Flatten Layer is Added by Default before the User can Add Dense Layers.
+                </p>
+            </div>
+
+            <button type="button" class="button" id="add_layer_after_flatten">Add Layer</button>
+
+            {% for layer in session["model_summary"]["layers_after_flatten"] %}
+                <div class="card" id="{{'layer_' + layer['number']}}">
+                    <p class="title">Layer {{layer["number"]}}</p>
+
+                    {% if layer["class_name"] == "Dense" %}
+                        <label for="{{'layer_' + layer['number'] + '_class'}}">Class</label>
+                        <select id="{{'layer_' + layer['number'] + '_class'}}" name="{{'layer_' + layer['number'] + '_class'}}" onchange="change_layer_class(this)">
+                            <option value="{{layer['class']}}" selected>{{layer['class_name']}}</option>
+                            
+                            <option value="Dropout">Dropout</option>
+                        </select>
+
+                        <div id="{{'layer_' + layer['number'] + '_parameters'}}">
+                            <label for="{{'layer_' + layer['number'] + '_units'}}">Units</label>
+                            <input type="text" class="units" id="{{'layer_' + layer['number'] + '_units'}}" name="{{'layer_' + layer['number'] + '_units'}}" value="{{layer['units']}}" required>
+
+                            <label for="{{'layer_' + layer['number'] + '_activation'}}">Activation Function</label>
+                            <select id="{{'layer_' + layer['number'] + '_activation'}}" name="{{'layer_' + layer['number'] + '_activation'}}">
+                                <option value="{{layer['activation']}}" selected>{{layer['activation']}}</option>
+
+                                {% for activation_function in activation_functions %}
+                                    <option value="{{activation_function}}">{{activation_function}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    {% elif layer["class_name"] == "Dropout" %}
+                        <label for="{{'layer_' + layer['number'] + '_class'}}">Class</label>
+                        <select id="{{'layer_' + layer['number'] + '_class'}}" name="{{'layer_' + layer['number'] + '_class'}}" onchange="change_layer_class(this)">
+                            <option value="{{layer['class']}}" selected>{{layer['class_name']}}</option>
+                            
+                            <option value="Dense">Dense</option>
+                        </select>
+
+                        <div id="{{'layer_' + layer['number'] + '_parameters'}}">
+                            <label for="{{'layer_' + layer['number'] + '_rate'}}">Drop Rate</label>
+                            <input type="text" class="drop_rate" id="{{'layer_' + layer['number'] + '_rate'}}" name="{{'layer_' + layer['number'] + '_rate'}}" value="{{layer['rate']}}" required>
+                        </div>
+
+                    {% endif %}
+
+                    <button type="button" class="button remove-layer" onclick="remove_layer_after_flatten(this)">Remove Layer</button>
+                </div>
+            {% endfor %}
+
+            <div class="card" id="output-layer">
+                <p class="title">Output Layer</p>
+
+                <label for="output_layer_class">Class</label>
+                <select id="output_layer_class" name="output_layer_class">
+                    <option value="{{session['model_summary']['output_layer']['class']}}" selected>{{session['model_summary']['output_layer']['class_name']}}</option>
+                </select>
+
+                <label for="output_layer_filter_size">Units</label>
+                <input type="text" id="output_layer_filter_size" name="output_layer_filter_size" value="{{session['model_summary']['output_layer']['units']}}" disabled>
+
+                <label for="output_layer_activation">Activation Function</label>
+                <select id="output_layer_activation" name="output_layer_activation">
+                    <option value="{{session['model_summary']['output_layer']['activation']}}">{{session['model_summary']['output_layer']['activation']}}</option>
+
+                    {% for activation_function in activation_functions %}
+                        <option value="{{activation_function}}">{{activation_function}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="card" id="general-parameters">
+                <p class="title">General Parameters</p>
+
+                <label style="font-weight: bold">Fitting Parameters</label>
+
+                <label for="number_of_epochs">Number of Epochs</label>
+                <input type="text" id="number_of_epochs" name="number_of_epochs" value = "3" disabled>
+
+                <label for="batch_size">Batch Size</label>
+                <input type="text" id="batch_size" name="batch_size" value="128" disabled>
+
+                <label for="multi_processing">Multi Processing</label>
+                <select name="multi_processing" id="multi_processing">
+                    <option value="enabled" selected>Enabled</option>
+                    <option value="disabled">Disabled</option>
+                </select>
+
+                <label style="font-weight: bold;">Learning Parameters</label>
+
+                <label for="optimization_function">Optimization Function</label>
+                <select name="optimization_function" id="optimization_function">
+                    {% for optimization_function in optimization_functions %}
+                        <option value="{{optimization_function}}">{{optimization_function}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="loss_function">Loss Function</label>
+                <select name="loss_function" id="loss_function">
+                    {% for loss_function in loss_functions %}
+                        <option value="{{loss_function}}">{{loss_function}}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="learning_rate">Learning Rate</label>
+                <input type="text" id="learning_rate" name="learning_rate" value="0.0001" required>
+            </div>
+
+            <button class="button" type="button" onclick="validate_layers()">Tune Model</button>
+        </div>
+
+    </form>
+
+    <script src="{{url_for( 'static', filename = 'js/main/tune_model/edit_layers.js' )}}"></script>
+
+{% endblock %}

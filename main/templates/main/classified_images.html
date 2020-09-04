@@ -1,0 +1,33 @@
+{% extends "main/base.html" %}
+{% set title = "Predictions" %}
+{% set active = "classify_images" %}
+
+{% block body %}
+
+    <form action="{{url_for( 'main.record_corrections' )}}" method="POST">
+
+        <div class="card-grid" id="classified-images">
+
+            {% for image in session["predictions"] %}
+
+                <div class="card">
+                    <img src="{{url_for('static', filename = 'uploads/temp/' + session['id'] + '/' + image)}}" alt="{{image}}">
+                    <select name="{{image}}">
+                        <option value="{{session['predictions'][image]}}" selected>{{session["predictions"][image]}}</option>
+                        <option value="Buildings">Buildings</option>
+                        <option value="Forest">Forest</option>
+                        <option value="Glacier">Glacier</option>
+                        <option value="Mountain">Mountain</option>
+                        <option value="Sea">Sea</option>
+                        <option value="Street">Street</option>
+                    </select>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <button class="button" id="next-step">Next</button>
+    </form>    
+
+{% endblock %}
