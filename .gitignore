@@ -1,0 +1,6 @@
+/src/firebase-service-account-key.json
+/src/static/uploads/temp
+/env
+/src/__pycache__
+/src/main/__pycache__
+/src/auth/__pycache__

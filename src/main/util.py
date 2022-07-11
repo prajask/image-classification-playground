@@ -2,12 +2,11 @@
 Main App Utility Functions
 
 """
-
 from flask import session
 from config import UPLOADS_FOLDER, CORRECTIONS_FOLDER
 
 from uuid import uuid4
-from os import mkdir, path, listdir
+from os import path, listdir, makedirs
 from shutil import rmtree, move
 import json
 
@@ -60,7 +59,7 @@ def get_upload_path():
     return upload_path
 
 def create_path_if_not_exists(upload_path):
-    mkdir(upload_path) if not path.exists(upload_path) else False
+    makedirs(upload_path) if not path.exists(upload_path) else False
 
 def classify_images(model_id):
     model = get_model(model_id)
