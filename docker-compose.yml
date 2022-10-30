@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  web:
+    container_name: image_classification_playground
+    build: .
+    command: python app.py
+    volumes:
+      - ./src/firebase:/firebase
+      - ./src/static/models/numpy_files:/static/models/numpy_files
+    ports:
+      - 5000:5000
+    image: image_classification_playground:latest
+    working_dir: /src
