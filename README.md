@@ -22,7 +22,7 @@ Image Classification Playground is a platform for Training and Labeling Images, 
 
 * **Prajas Kadepurkar** - [prajask](https://github.com/prajask)
 * **Abhishek Ghoshal** - [abhighosh98](https://github.com/abhighosh98)
-* **Elton Lemos** - [icefrostpeng](https://github.com/icefrostpeng)
+* **Elton Lemos** - [eltonlemos](https://github.com/eltonlemos)
 * **Tanmey Saraiya** - [tanmeysaraiya](https://github.com/TanmeySaraiya)
 
 ## License
